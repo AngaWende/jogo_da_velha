@@ -4,8 +4,8 @@ from time import sleep
 pygame.init()
 
 
-
 YELLOW = (255, 255, 0)
+cor_das_barras = YELLOW
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 
@@ -37,6 +37,12 @@ casas_x = []
 casas_o = []
 cont = 0
 jogadas_feitas =[]
+
+def pintar_barras():
+    pygame.draw.line(screen, (cor_das_barras), (largura // 3, 0), (largura // 3, altura), expessura_padrao)
+    pygame.draw.line(screen, (cor_das_barras), (largura // 1.5, 0), (largura // 1.5, altura), expessura_padrao)
+    pygame.draw.line(screen, (cor_das_barras), (0, altura // 3), (largura, altura // 3), expessura_padrao)
+    pygame.draw.line(screen, (cor_das_barras), (0, altura // 1.5), (largura, altura // 1.5), expessura_padrao)
 def pintar_circulo(pos):
     pygame.draw.circle(screen, BLUE, pos, altura // 7, expessura_padrao)
 
@@ -57,19 +63,15 @@ def validar_vitoria(turno):
 
 
 def tela_final(texto):
+
     img_score = fonte.render(str(texto), True, YELLOW)
     screen.fill(BLACK)
     screen.blit(img_score, (largura//6, altura // 2))
 
-
+pintar_barras()
 while True:
     # screen.fill(BLACK)
     turno = 'x' if cont % 2 == 0 else 'o'
-    pygame.draw.line(screen, (YELLOW), (largura //3, 0 ), (largura//3,altura), expessura_padrao)
-    pygame.draw.line(screen, (YELLOW), (largura //1.5, 0 ), (largura//1.5,altura), expessura_padrao)
-    pygame.draw.line(screen, (YELLOW), (0, altura//3), (largura, altura//3), expessura_padrao)
-    pygame.draw.line(screen, (YELLOW), (0, altura//1.5), (largura, altura//1.5),expessura_padrao)
-
 
 
 
@@ -79,15 +81,14 @@ while True:
             exit()
         if e.type == pygame.MOUSEBUTTONUP:
 
-            print('ojoij')
+
             pos = pygame.mouse.get_pos()
-            print(cont)
 
             if pos[0] < q1[0]+p_meio and pos[1]<q1[1]+p_meio:
                 jogada = '1'
-            elif pos[0] < q2[0]+p_meio  and pos[1]<q2[1]+p_meio:
+            elif pos[0] < q2[0]+p_meio and pos[1]<q2[1]+p_meio:
                 jogada = '2'
-            elif pos[0] < q3[0] +p_meio and pos[1] < q3[1]+p_meio:
+            elif pos[0] < q3[0] + p_meio and pos[1] < q3[1]+p_meio:
                 jogada = '3'
             elif pos[0] < q4[0]+p_meio and pos[1]<q4[1]+p_meio:
                 jogada = '4'
@@ -143,18 +144,18 @@ while True:
             if turno == 'x': casas_x.append(int(jogada))
             if turno == 'o': casas_o.append(int(jogada))
 
-
+            pintar_barras()
 
             if validar_vitoria(turno):
                 print(f'O JOGADOR {turno} VENCEU!!!')
-                screen.fill(BLACK)
                 tela_final(f'O JOGADOR "{turno.upper()}" VENCEU!!!')
                 break
 
+
             if len(jogadas_feitas) >= 9:
-                screen.fill(BLACK)
                 tela_final("EMPATE!!!!!")
                 break
+
 
 
     pygame.display.update()
