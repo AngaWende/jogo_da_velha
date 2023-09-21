@@ -1,3 +1,5 @@
-from tela import *
+from random import choice
+x = [1,2,3]
 
-jogar()
+for i in range(15):
+    print(choice(x))
