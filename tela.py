@@ -1,20 +1,20 @@
 import pygame
 from time import sleep
 
-pygame.init()
 
+pygame.init()
 
 YELLOW = (255, 255, 0)
 cor_das_barras = YELLOW
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 
-screen = pygame.display.set_mode((420,420))
+screen = pygame.display.set_mode((420, 420))
 # screen = pygame.display.set_mode((1200, 680))
 largura = screen.get_width()
 altura = screen.get_height()
 
-fonte = pygame.font.SysFont('arial', largura//19, True)
+fonte = pygame.font.SysFont('arial', largura // 19, True)
 
 q1 = (largura // 6, altura // 6)
 q2 = (largura // 2, altura // 6)
@@ -35,20 +35,32 @@ expessura_padrao = largura // 75
 
 casas_x = []
 casas_o = []
-cont = 0
-jogadas_feitas =[]
+jogadas_feitas = []
+
+def resetar():
+    global casas_x, casas_o, jogadas_feitas
+    casas_x = []
+    casas_o = []
+    jogadas_feitas = []
+
 
 def pintar_barras():
     pygame.draw.line(screen, (cor_das_barras), (largura // 3, 0), (largura // 3, altura), expessura_padrao)
     pygame.draw.line(screen, (cor_das_barras), (largura // 1.5, 0), (largura // 1.5, altura), expessura_padrao)
     pygame.draw.line(screen, (cor_das_barras), (0, altura // 3), (largura, altura // 3), expessura_padrao)
     pygame.draw.line(screen, (cor_das_barras), (0, altura // 1.5), (largura, altura // 1.5), expessura_padrao)
+
+
 def pintar_circulo(pos):
     pygame.draw.circle(screen, BLUE, pos, altura // 7, expessura_padrao)
 
+
 def pintar_x(pos):
-    pygame.draw.line(screen, BLUE, (pos[0] - base_para_X, pos[1] - base_para_X), (pos[0] + 50, pos[1] + base_para_X), expessura_padrao)
-    pygame.draw.line(screen, BLUE, (pos[0]-base_para_X, pos[1]+base_para_X), (pos[0]+50, pos[1]-base_para_X), expessura_padrao)
+    pygame.draw.line(screen, BLUE, (pos[0] - base_para_X, pos[1] - base_para_X), (pos[0] + 50, pos[1] + base_para_X),
+                     expessura_padrao)
+    pygame.draw.line(screen, BLUE, (pos[0] - base_para_X, pos[1] + base_para_X), (pos[0] + 50, pos[1] - base_para_X),
+                     expessura_padrao)
+
 
 def validar_vitoria(turno):
     casas = casas_x if turno == 'x' else casas_o
@@ -63,103 +75,104 @@ def validar_vitoria(turno):
 
 
 def tela_final(texto):
-
     img_score = fonte.render(str(texto), True, YELLOW)
     screen.fill(BLACK)
-    screen.blit(img_score, (largura//6, altura // 2))
-
-pintar_barras()
-while True:
-    # screen.fill(BLACK)
-    turno = 'x' if cont % 2 == 0 else 'o'
-
-
-
-    for e in pygame.event.get():
-        if e.type == pygame.QUIT:
-            pygame.quit()
-            exit()
-        if e.type == pygame.MOUSEBUTTONUP:
-
-
-            pos = pygame.mouse.get_pos()
-
-            if pos[0] < q1[0]+p_meio and pos[1]<q1[1]+p_meio:
-                jogada = '1'
-            elif pos[0] < q2[0]+p_meio and pos[1]<q2[1]+p_meio:
-                jogada = '2'
-            elif pos[0] < q3[0] + p_meio and pos[1] < q3[1]+p_meio:
-                jogada = '3'
-            elif pos[0] < q4[0]+p_meio and pos[1]<q4[1]+p_meio:
-                jogada = '4'
-            elif pos[0] < q5[0]+p_meio and pos[1]<q5[1]+p_meio:
-                jogada = '5'
-            elif pos[0] < q6[0]+p_meio and pos[1]<q6[1]+p_meio:
-                jogada = '6'
-            elif pos[0] < q7[0]+p_meio and pos[1]<q7[1]+p_meio:
-                jogada = '7'
-            elif pos[0] < q8[0]+p_meio and pos[1]<q8[1]+p_meio:
-                jogada = '8'
-            elif pos[0] < q9[0]+p_meio and pos[1]<q9[1]+p_meio:
-                jogada = '9'
-
-            if jogada not in jogadas_feitas:
-                cont += 1
-                match jogada:
-                    case '1':
-                        p1 = turno
-                        pintar_circulo(q1) if turno == 'o' else pintar_x(q1)
-                    case '2':
-                        p2 = turno
-                        pintar_circulo(q2) if turno == 'o' else pintar_x(q2)
-                    case '3':
-                        p3 = turno
-                        pintar_circulo(q3) if turno == 'o' else pintar_x(q3)
-                    case '4':
-                        p4 = turno
-                        pintar_circulo(q4) if turno == 'o' else pintar_x(q4)
-                    case '5':
-                        p5 = turno
-                        pintar_circulo(q5) if turno == 'o' else pintar_x(q5)
-                    case '6':
-                        p6 = turno
-                        pintar_circulo(q6) if turno == 'o' else pintar_x(q6)
-                    case '7':
-                        p7 = turno
-                        pintar_circulo(q7) if turno == 'o' else pintar_x(q7)
-                    case '8':
-                        p8 = turno
-                        pintar_circulo(q8) if turno == 'o' else pintar_x(q8)
-                    case '9':
-                        p9 = turno
-                        pintar_circulo(q9) if turno == 'o' else pintar_x(q9)
-                    case _:
-                        print('Casa inválida, escolha outra.')
-                        continue
-                jogadas_feitas.append(jogada)
-            else:
-                print('Casa ocupada, escolha outra.')
-                continue
-
-            if turno == 'x': casas_x.append(int(jogada))
-            if turno == 'o': casas_o.append(int(jogada))
-
-            pintar_barras()
-
-            if validar_vitoria(turno):
-                print(f'O JOGADOR {turno} VENCEU!!!')
-                tela_final(f'O JOGADOR "{turno.upper()}" VENCEU!!!')
-                break
-
-
-            if len(jogadas_feitas) >= 9:
-                tela_final("EMPATE!!!!!")
-                break
-
-
-
+    screen.blit(img_score, (largura // 6, altura // 2))
     pygame.display.update()
+    sleep(2)
+    print('fim')
+    return
 
 
+def jogar():
+    screen.fill(BLACK)
+    pintar_barras()
+    cont = 0
+    while True:
+        # screen.fill(BLACK)
+        turno = 'x' if cont % 2 == 0 else 'o'
 
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if e.type == pygame.MOUSEBUTTONUP:
 
+                pos = pygame.mouse.get_pos()
+
+                if pos[0] < q1[0] + p_meio and pos[1] < q1[1] + p_meio:
+                    jogada = '1'
+                elif pos[0] < q2[0] + p_meio and pos[1] < q2[1] + p_meio:
+                    jogada = '2'
+                elif pos[0] < q3[0] + p_meio and pos[1] < q3[1] + p_meio:
+                    jogada = '3'
+                elif pos[0] < q4[0] + p_meio and pos[1] < q4[1] + p_meio:
+                    jogada = '4'
+                elif pos[0] < q5[0] + p_meio and pos[1] < q5[1] + p_meio:
+                    jogada = '5'
+                elif pos[0] < q6[0] + p_meio and pos[1] < q6[1] + p_meio:
+                    jogada = '6'
+                elif pos[0] < q7[0] + p_meio and pos[1] < q7[1] + p_meio:
+                    jogada = '7'
+                elif pos[0] < q8[0] + p_meio and pos[1] < q8[1] + p_meio:
+                    jogada = '8'
+                elif pos[0] < q9[0] + p_meio and pos[1] < q9[1] + p_meio:
+                    jogada = '9'
+
+                if jogada not in jogadas_feitas:
+                    cont += 1
+                    match jogada:
+                        case '1':
+                            p1 = turno
+                            pintar_circulo(q1) if turno == 'o' else pintar_x(q1)
+                        case '2':
+                            p2 = turno
+                            pintar_circulo(q2) if turno == 'o' else pintar_x(q2)
+                        case '3':
+                            p3 = turno
+                            pintar_circulo(q3) if turno == 'o' else pintar_x(q3)
+                        case '4':
+                            p4 = turno
+                            pintar_circulo(q4) if turno == 'o' else pintar_x(q4)
+                        case '5':
+                            p5 = turno
+                            pintar_circulo(q5) if turno == 'o' else pintar_x(q5)
+                        case '6':
+                            p6 = turno
+                            pintar_circulo(q6) if turno == 'o' else pintar_x(q6)
+                        case '7':
+                            p7 = turno
+                            pintar_circulo(q7) if turno == 'o' else pintar_x(q7)
+                        case '8':
+                            p8 = turno
+                            pintar_circulo(q8) if turno == 'o' else pintar_x(q8)
+                        case '9':
+                            p9 = turno
+                            pintar_circulo(q9) if turno == 'o' else pintar_x(q9)
+                        case _:
+                            print('Casa inválida, escolha outra.')
+                            continue
+                    jogadas_feitas.append(jogada)
+                else:
+                    print('Casa ocupada, escolha outra.')
+                    continue
+
+                if turno == 'x': casas_x.append(int(jogada))
+                if turno == 'o': casas_o.append(int(jogada))
+
+                pintar_barras()
+
+                if validar_vitoria(turno):
+                    print(f'O JOGADOR {turno} VENCEU!!!')
+                    tela_final(f'O JOGADOR "{turno.upper()}" VENCEU!!!')
+                    print('xxx')
+                    return turno
+                    # break
+
+                if len(jogadas_feitas) >= 9:
+                    tela_final("EMPATE!!!!!")
+                    return
+
+        pygame.display.update()
+
+# jogar()
